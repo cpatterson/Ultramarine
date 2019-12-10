@@ -8,65 +8,25 @@
 import CoreBluetooth
 import Combine
 
-public enum PublishedConnectionEvent : Int {
-    case peerDisconnected
-    case peerConnected
-    case peerFailedToConnect
-}
-
-class CBCentralManagerMulticastDelegate: NSObject, CBCentralManagerDelegate {
-    let multicast = MulticastDelegate<CBCentralManagerDelegate>()
-    
-    func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        multicast.invokeDelegates { $0.centralManagerDidUpdateState(central) }
-    }
-    
-    func centralManager(_ central: CBCentralManager, connectionEventDidOccur event: CBConnectionEvent, for peripheral: CBPeripheral) {
-        multicast.invokeDelegates { $0.centralManager?(central, connectionEventDidOccur: event, for: peripheral) }
-    }
-    
-    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        multicast.invokeDelegates { $0.centralManager?(central, didConnect: peripheral) }
-    }
-    
-    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        multicast.invokeDelegates { $0.centralManager?(central, didFailToConnect: peripheral, error: error) }
-    }
-    
-    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        multicast.invokeDelegates { $0.centralManager?(central, didDisconnectPeripheral: peripheral, error: error) }
-    }
-}
-
 public class CBCentralManagerPublisher : NSObject, CBCentralManagerDelegate {
     weak var central: CBCentralManager?
     
     public init(central: CBCentralManager) {
         super.init()
         self.central = central
-        if let delegate = central.delegate as? CBCentralManagerMulticastDelegate {
-            delegate.multicast.addDelegate(self)
-        } else {
-            let multicastDelegate = CBCentralManagerMulticastDelegate()
-            if let delegate = central.delegate {
-                multicastDelegate.multicast.addDelegate(delegate)
-            }
-            multicastDelegate.multicast.addDelegate(self)
-            central.delegate = multicastDelegate
-        }
+        central.addDelegate(self)
     }
     
     open func centralManagerDidUpdateState(_ central: CBCentralManager) {}
     
     deinit {
-        if let central = self.central, let delegate = central.delegate as? CBCentralManagerMulticastDelegate {
-            delegate.multicast.removeDelegate(self)
-            if delegate.multicast.isEmpty {
-                central.delegate = nil
-            }
+        if let central = self.central {
+            central.removeDelegate(self)
         }
     }
 }
+
+// MARK: - StatePublisher extension
 
 extension CBCentralManager {
     
@@ -90,6 +50,8 @@ extension CBCentralManager {
     }
 }
 
+// MARK: - AuthorizationPublisher extension
+
 extension CBCentralManager {
     
     public class AuthorizationPublisher : CBCentralManagerPublisher, Publisher {
@@ -112,6 +74,14 @@ extension CBCentralManager {
     }
 }
 
+// MARK: - ConnectionEventPublisher extension
+
+public enum PublishedConnectionEvent : Int {
+    case peerDisconnected
+    case peerConnected
+    case peerFailedToConnect
+}
+
 extension CBCentralManager {
 
     public class ConnectionEventPublisher: CBCentralManagerPublisher, Publisher {
@@ -131,6 +101,10 @@ extension CBCentralManager {
         
         public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
             self.subject.send((peripheral, .peerConnected))
+            
+            // TODO: subscribe peripheral to connection event publisher and pass through connection events
+            //let peripheralPublisher = peripheral.connectionEventPublisher
+            //self.subject.receive(subscriber: peripheralPublisher)
         }
         
         public func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
@@ -152,3 +126,4 @@ extension CBCentralManager {
         return ConnectionEventPublisher(central: self)
     }
 }
+

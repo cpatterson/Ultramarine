@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		744F23F0237739D500826E67 /* CBPeripheral+Multicast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744F23EF237739D500826E67 /* CBPeripheral+Multicast.swift */; };
+		744F23F223773E4600826E67 /* CBCentralManager+Multicast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744F23F123773E4600826E67 /* CBCentralManager+Multicast.swift */; };
+		744F23F423773EB800826E67 /* CBPeripheral+Publishers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744F23F323773EB800826E67 /* CBPeripheral+Publishers.swift */; };
 		74ECC0A92374270400533CDC /* Ultramarine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74ECC09F2374270400533CDC /* Ultramarine.framework */; };
 		74ECC0AE2374270500533CDC /* UltramarineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ECC0AD2374270500533CDC /* UltramarineTests.swift */; };
 		74ECC0B02374270500533CDC /* Ultramarine.h in Headers */ = {isa = PBXBuildFile; fileRef = 74ECC0A22374270400533CDC /* Ultramarine.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -25,6 +28,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		744F23EF237739D500826E67 /* CBPeripheral+Multicast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CBPeripheral+Multicast.swift"; sourceTree = "<group>"; };
+		744F23F123773E4600826E67 /* CBCentralManager+Multicast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CBCentralManager+Multicast.swift"; sourceTree = "<group>"; };
+		744F23F323773EB800826E67 /* CBPeripheral+Publishers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CBPeripheral+Publishers.swift"; sourceTree = "<group>"; };
 		74ECC09F2374270400533CDC /* Ultramarine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Ultramarine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74ECC0A22374270400533CDC /* Ultramarine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Ultramarine.h; sourceTree = "<group>"; };
 		74ECC0A32374270400533CDC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -95,7 +101,10 @@
 			isa = PBXGroup;
 			children = (
 				74ECC0BF23743EB000533CDC /* MulticastDelegate.swift */,
+				744F23F123773E4600826E67 /* CBCentralManager+Multicast.swift */,
 				74ECC0BD2374281900533CDC /* CBCentralManager+Publishers.swift */,
+				744F23EF237739D500826E67 /* CBPeripheral+Multicast.swift */,
+				744F23F323773EB800826E67 /* CBPeripheral+Publishers.swift */,
 			);
 			path = CoreBluetoothExtensions;
 			sourceTree = "<group>";
@@ -209,7 +218,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				744F23F0237739D500826E67 /* CBPeripheral+Multicast.swift in Sources */,
 				74ECC0BE2374281900533CDC /* CBCentralManager+Publishers.swift in Sources */,
+				744F23F423773EB800826E67 /* CBPeripheral+Publishers.swift in Sources */,
+				744F23F223773E4600826E67 /* CBCentralManager+Multicast.swift in Sources */,
 				74ECC0C023743EB000533CDC /* MulticastDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
