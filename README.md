@@ -12,8 +12,8 @@ I imagine this framework allowing an app developer to declare support for Blueto
 using declarative syntax like this:
 
 ```swift
-struct GlucoseMeter: BluetoothPeripheral {
-    var services: some Services {
+class GlucoseMeter: BluetoothPeripheral {
+    var services: some ServiceList {
         GlucoseService(),
         DeviceInfoService(),
         BatteryService()
@@ -21,7 +21,7 @@ struct GlucoseMeter: BluetoothPeripheral {
 }
 
 // Services can be defined by parsing the public XML file...
-struct GlucoseService: Service {
+class GlucoseService: Service {
     init() {
         self.init(fromXml: "org.bluetooth.service.glucose.xml")
     }
@@ -30,7 +30,7 @@ struct GlucoseService: Service {
 // ...or by building them from the ground up...
 struct DeviceInfoService: Service {
     let uuid = UUID(string: "180A"),
-    var characteristics: some Characteristics {
+    var characteristics: some CharacteristicList {
         ManufacturerName(),
         ModelNumber(),
         SerialNumber(),
@@ -50,6 +50,23 @@ struct ManufacturerName: Characteristic {
 }
 
 // etc. etc.
+```
+
+### Central or Peripheral from the same type definition
+
+Once you have defined a `BluetoothPeripheral` subclass, my goal is that the same class could be used on both the Central side to discover matching devices, and on the Peripheral side to start running the services.
+
+On the Central side:
+```swift
+let glucoseMeter = GlucoseMeter()
+glucoseMeter
+    .discover(options)
+    .sink { discovery in 
+        // `discovery` object properties:
+        // - `peripheral`
+        // - `advertisementData`
+        // - `rssi`
+    }
 ```
 
 ### Combine-based event handling
