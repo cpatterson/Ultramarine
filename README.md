@@ -69,6 +69,15 @@ glucoseMeter
     }
 ```
 
+On the Peripheral side:
+```swift
+let glucoseMeter = GlucoseMeter()
+if let glucoseService = glucoseMeter.services.first as? GlucoseService {
+    // set up characteristic handlers
+}
+glucoseMeter.startPeripheral()
+```
+
 ### Combine-based event handling
 
 Of course, this API must at its foundation provide some kind of wrapper around the existing Core Bluetooth APIs.
