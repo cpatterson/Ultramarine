@@ -1,0 +1,25 @@
+PODS:
+  - RZBluetooth/Core (2.0.0)
+  - RZBluetooth/Mock (2.0.0):
+    - RZBluetooth/Core
+  - RZBluetooth/Test (2.0.0):
+    - RZBluetooth/Mock
+
+DEPENDENCIES:
+  - RZBluetooth/Test (from `https://github.com/Rightpoint/RZBluetooth.git`)
+
+EXTERNAL SOURCES:
+  RZBluetooth:
+    :git: https://github.com/Rightpoint/RZBluetooth.git
+
+CHECKOUT OPTIONS:
+  RZBluetooth:
+    :commit: af6396a2a8c5ddeabfe9b6ad1fa091946800e831
+    :git: https://github.com/Rightpoint/RZBluetooth.git
+
+SPEC CHECKSUMS:
+  RZBluetooth: c92e21a798b24382f375e75e1e99dc0f3ba448a9
+
+PODFILE CHECKSUM: 0f456fb207698fca303a81c6710dfa76394a3aee
+
+COCOAPODS: 1.7.4
