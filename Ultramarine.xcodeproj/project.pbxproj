@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,10 +11,13 @@
 		744F23F223773E4600826E67 /* CBCentralManager+Multicast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744F23F123773E4600826E67 /* CBCentralManager+Multicast.swift */; };
 		744F23F423773EB800826E67 /* CBPeripheral+Publishers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744F23F323773EB800826E67 /* CBPeripheral+Publishers.swift */; };
 		74ECC0A92374270400533CDC /* Ultramarine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74ECC09F2374270400533CDC /* Ultramarine.framework */; };
-		74ECC0AE2374270500533CDC /* UltramarineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ECC0AD2374270500533CDC /* UltramarineTests.swift */; };
+		74ECC0AE2374270500533CDC /* UltramarineTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ECC0AD2374270500533CDC /* UltramarineTestCase.swift */; };
 		74ECC0B02374270500533CDC /* Ultramarine.h in Headers */ = {isa = PBXBuildFile; fileRef = 74ECC0A22374270400533CDC /* Ultramarine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		74ECC0BE2374281900533CDC /* CBCentralManager+Publishers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ECC0BD2374281900533CDC /* CBCentralManager+Publishers.swift */; };
 		74ECC0C023743EB000533CDC /* MulticastDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74ECC0BF23743EB000533CDC /* MulticastDelegate.swift */; };
+		9D87BB0A23BE60E70095622C /* Data+Ultramarine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D87BB0923BE60E70095622C /* Data+Ultramarine.swift */; };
+		9D87BB0C23BE6CA50095622C /* CharacteristicValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D87BB0B23BE6CA50095622C /* CharacteristicValue.swift */; };
+		9D87BB0E23BE6DE50095622C /* Error+Ultramarine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D87BB0D23BE6DE50095622C /* Error+Ultramarine.swift */; };
 		B9D2C38F0E97572338419C2C /* Pods_Ultramarine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DAF8A9FC730A20B24F7D5C4 /* Pods_Ultramarine.framework */; };
 		BDC2CFBF4D75415684D3366F /* Pods_UltramarineTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9A9F9FD5EF4E088952D4A1B /* Pods_UltramarineTests.framework */; };
 /* End PBXBuildFile section */
@@ -38,11 +41,14 @@
 		74ECC0A22374270400533CDC /* Ultramarine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Ultramarine.h; sourceTree = "<group>"; };
 		74ECC0A32374270400533CDC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		74ECC0A82374270400533CDC /* UltramarineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UltramarineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		74ECC0AD2374270500533CDC /* UltramarineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltramarineTests.swift; sourceTree = "<group>"; };
+		74ECC0AD2374270500533CDC /* UltramarineTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltramarineTestCase.swift; sourceTree = "<group>"; };
 		74ECC0AF2374270500533CDC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		74ECC0BD2374281900533CDC /* CBCentralManager+Publishers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CBCentralManager+Publishers.swift"; sourceTree = "<group>"; };
 		74ECC0BF23743EB000533CDC /* MulticastDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MulticastDelegate.swift; sourceTree = "<group>"; };
 		9AE3DD855D483133BE7AE704 /* Pods-Ultramarine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ultramarine.release.xcconfig"; path = "Target Support Files/Pods-Ultramarine/Pods-Ultramarine.release.xcconfig"; sourceTree = "<group>"; };
+		9D87BB0923BE60E70095622C /* Data+Ultramarine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Ultramarine.swift"; sourceTree = "<group>"; };
+		9D87BB0B23BE6CA50095622C /* CharacteristicValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacteristicValue.swift; sourceTree = "<group>"; };
+		9D87BB0D23BE6DE50095622C /* Error+Ultramarine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Ultramarine.swift"; sourceTree = "<group>"; };
 		9DAF8A9FC730A20B24F7D5C4 /* Pods_Ultramarine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ultramarine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9A9F9FD5EF4E088952D4A1B /* Pods_UltramarineTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UltramarineTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8FF07D8822CA24E5E46B258 /* Pods-UltramarineTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UltramarineTests.release.xcconfig"; path = "Target Support Files/Pods-UltramarineTests/Pods-UltramarineTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -102,6 +108,7 @@
 		74ECC0A12374270400533CDC /* Ultramarine */ = {
 			isa = PBXGroup;
 			children = (
+				9D87BB0823BE60BF0095622C /* FoundationExtensions */,
 				74ECC0BC237427F400533CDC /* CoreBluetoothExtensions */,
 				74ECC0A22374270400533CDC /* Ultramarine.h */,
 				74ECC0A32374270400533CDC /* Info.plist */,
@@ -112,7 +119,7 @@
 		74ECC0AC2374270400533CDC /* UltramarineTests */ = {
 			isa = PBXGroup;
 			children = (
-				74ECC0AD2374270500533CDC /* UltramarineTests.swift */,
+				74ECC0AD2374270500533CDC /* UltramarineTestCase.swift */,
 				74ECC0AF2374270500533CDC /* Info.plist */,
 			);
 			path = UltramarineTests;
@@ -130,6 +137,16 @@
 			path = CoreBluetoothExtensions;
 			sourceTree = "<group>";
 		};
+		9D87BB0823BE60BF0095622C /* FoundationExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				9D87BB0B23BE6CA50095622C /* CharacteristicValue.swift */,
+				9D87BB0923BE60E70095622C /* Data+Ultramarine.swift */,
+				9D87BB0D23BE6DE50095622C /* Error+Ultramarine.swift */,
+			);
+			path = FoundationExtensions;
+			sourceTree = "<group>";
+		};
 		AAB2A741740784CFAC9CFB42 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -138,7 +155,6 @@
 				5B91AB48435A0DE3EE59BC6B /* Pods-UltramarineTests.debug.xcconfig */,
 				E8FF07D8822CA24E5E46B258 /* Pods-UltramarineTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -318,10 +334,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9D87BB0C23BE6CA50095622C /* CharacteristicValue.swift in Sources */,
 				744F23F0237739D500826E67 /* CBPeripheral+Multicast.swift in Sources */,
 				74ECC0BE2374281900533CDC /* CBCentralManager+Publishers.swift in Sources */,
+				9D87BB0E23BE6DE50095622C /* Error+Ultramarine.swift in Sources */,
 				744F23F423773EB800826E67 /* CBPeripheral+Publishers.swift in Sources */,
 				744F23F223773E4600826E67 /* CBCentralManager+Multicast.swift in Sources */,
+				9D87BB0A23BE60E70095622C /* Data+Ultramarine.swift in Sources */,
 				74ECC0C023743EB000533CDC /* MulticastDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -330,7 +349,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				74ECC0AE2374270500533CDC /* UltramarineTests.swift in Sources */,
+				74ECC0AE2374270500533CDC /* UltramarineTestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
