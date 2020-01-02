@@ -14,43 +14,48 @@ using declarative syntax like this:
 ```swift
 class GlucoseMeter: BluetoothPeripheral {
     var services: some ServiceList {
-        GlucoseService(),
-        DeviceInfoService(),
+        GlucoseService()
+        DeviceInfoService()
         BatteryService()
     }
 }
+```
 
-// Services can be defined by parsing the public XML file...
-class GlucoseService: Service {
-    init() {
-        self.init(fromXml: "org.bluetooth.service.glucose.xml")
-    }
-}
-
-// ...or by building them from the ground up...
-struct DeviceInfoService: Service {
-    let uuid = UUID(string: "180A"),
+Services can be defined by building them from the ground up:
+```swift
+class DeviceInfoService: Service {
+    let uuid = CBUUID(string: "180a")
     var characteristics: some CharacteristicList {
-        ManufacturerName(),
-        ModelNumber(),
-        SerialNumber(),
-        HardwareRevision(),
-        FirmwareRevision(),
-        SoftwareRevision(),
-        SystemID(),
+        ManufacturerName()
+        ModelNumber()
+        SerialNumber()
+        HardwareRevision()
+        FirmwareRevision()
+        SoftwareRevision()
+        SystemID()
         PnPID()
     }
 }
 
 struct ManufacturerName: Characteristic {
-    let uuid = UUID(string: "2A29"),
+    let uuid = CBUUID(string: "2a29")
     var value: some CharacteristicValue {
-        String("")
+        String("MyCompany")
     }
 }
 
 // etc. etc.
 ```
+
+...or, as a goal for this project, by parsing the public XML file:
+```swift
+class GlucoseService: Service {
+    init() {
+        self.init(fromXml: "org.bluetooth.service.glucose.xml")
+    }
+}
+```
+
 
 ### Central or Peripheral from the same type definition
 
@@ -67,6 +72,12 @@ glucoseMeter
         // - `advertisementData`
         // - `rssi`
     }
+```
+
+On the Peripheral side:
+```swift
+let glucoseMeter = GlucoseMeter()
+glucoseMeter.startPeripheral()
 ```
 
 ### Combine-based event handling

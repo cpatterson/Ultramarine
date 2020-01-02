@@ -49,6 +49,7 @@
 		9D87BB0923BE60E70095622C /* Data+Ultramarine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Ultramarine.swift"; sourceTree = "<group>"; };
 		9D87BB0B23BE6CA50095622C /* CharacteristicValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacteristicValue.swift; sourceTree = "<group>"; };
 		9D87BB0D23BE6DE50095622C /* Error+Ultramarine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Ultramarine.swift"; sourceTree = "<group>"; };
+		9D87BB1023BE7D440095622C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		9DAF8A9FC730A20B24F7D5C4 /* Pods_Ultramarine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ultramarine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9A9F9FD5EF4E088952D4A1B /* Pods_UltramarineTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UltramarineTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8FF07D8822CA24E5E46B258 /* Pods-UltramarineTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UltramarineTests.release.xcconfig"; path = "Target Support Files/Pods-UltramarineTests/Pods-UltramarineTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -88,6 +89,7 @@
 		74ECC0952374270400533CDC = {
 			isa = PBXGroup;
 			children = (
+				9D87BB0F23BE7D220095622C /* Docs */,
 				74ECC0A12374270400533CDC /* Ultramarine */,
 				74ECC0AC2374270400533CDC /* UltramarineTests */,
 				74ECC0A02374270400533CDC /* Products */,
@@ -145,6 +147,14 @@
 				9D87BB0D23BE6DE50095622C /* Error+Ultramarine.swift */,
 			);
 			path = FoundationExtensions;
+			sourceTree = "<group>";
+		};
+		9D87BB0F23BE7D220095622C /* Docs */ = {
+			isa = PBXGroup;
+			children = (
+				9D87BB1023BE7D440095622C /* README.md */,
+			);
+			name = Docs;
 			sourceTree = "<group>";
 		};
 		AAB2A741740784CFAC9CFB42 /* Pods */ = {
