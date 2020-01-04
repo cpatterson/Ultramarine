@@ -77,6 +77,9 @@ glucoseMeter
 On the Peripheral side:
 ```swift
 let glucoseMeter = GlucoseMeter()
+if let glucoseService = glucoseMeter.services.first as? GlucoseService {
+    // set up characteristic handlers
+}
 glucoseMeter.startPeripheral()
 ```
 
