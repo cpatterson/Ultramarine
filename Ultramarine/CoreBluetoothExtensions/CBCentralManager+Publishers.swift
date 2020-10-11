@@ -136,7 +136,7 @@ extension CBCentralManager {
         
         // MARK: CBCentralManagerDelegate discovery methods
         
-        public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
             // If serviceUUIDs is non-nil, only send discoveries that match. Otherwise, send all discoveries.
             let peripheralServiceUUIDs: [CBUUID] = peripheral.services?.map { $0.uuid } ?? []
             if serviceUUIDs == nil || serviceUUIDs!.contains(where: peripheralServiceUUIDs.contains) {
@@ -201,23 +201,23 @@ extension CBCentralManager {
         
         // MARK: CBCentralManagerDelegate connection methods
         
-        public func centralManager(_ central: CBCentralManager, connectionEventDidOccur event: CBConnectionEvent, for peripheral: CBPeripheral) {
+        func centralManager(_ central: CBCentralManager, connectionEventDidOccur event: CBConnectionEvent, for peripheral: CBPeripheral) {
             guard let publishedEvent = ConnectionEventType(rawValue: event.rawValue) else { return }
             self.subject.send(ConnectionEvent(peripheral: peripheral, event: publishedEvent))
         }
         
-        public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
             self.subject.send(ConnectionEvent(peripheral: peripheral, event: .peerConnected))
         }
         
-        public func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
             self.subject.send(ConnectionEvent(peripheral: peripheral, event: .peerFailedToConnect))
             if let error = error {
                 self.subject.send(completion: .failure(error))
             }
         }
         
-        public func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
             self.subject.send(ConnectionEvent(peripheral: peripheral, event: .peerDisconnected))
             if let error = error {
                 self.subject.send(completion: .failure(error))

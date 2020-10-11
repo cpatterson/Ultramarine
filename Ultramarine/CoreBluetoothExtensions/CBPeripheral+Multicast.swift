@@ -143,4 +143,14 @@ extension CBPeripheral {
             }
         }
     }
+    
+    /**
+     *  Use this method to invoke a closure on each delegate.
+     *
+     *  - parameter invocation: The closure to be invoked on each delegate.
+     */
+	public func invokeDelegates(_ invocation: (CBPeripheralDelegate) -> ()) {
+        guard let delegate = self.delegate as? CBPeripheralMulticastDelegate else { return }
+        delegate.multicast.invokeDelegates(invocation)
+	}
 }
