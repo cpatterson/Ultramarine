@@ -23,8 +23,7 @@ class GlucoseMeter: BluetoothPeripheral {
 
 Services can be defined by building them from the ground up:
 ```swift
-class DeviceInfoService: Service {
-    let uuid = CBUUID(string: "180a")
+class DeviceInfoService: Service(uuid: CBUUID(string: "180a")) {
     var characteristics: some CharacteristicList {
         ManufacturerName()
         ModelNumber()
@@ -37,8 +36,7 @@ class DeviceInfoService: Service {
     }
 }
 
-struct ManufacturerName: Characteristic {
-    let uuid = CBUUID(string: "2a29")
+struct ManufacturerName: Characteristic(uuid: CBUUID(string: "2a29")) {
     var value: some CharacteristicValue {
         String("MyCompany")
     }
@@ -59,7 +57,8 @@ class GlucoseService: Service {
 
 ### Central or Peripheral from the same type definition
 
-Once you have defined a `BluetoothPeripheral` subclass, my goal is that the same class could be used on both the Central side to discover matching devices, and on the Peripheral side to start running the services.
+Once you have defined a `BluetoothPeripheral` subclass, my goal is that the same class could be used 
+on both the Central side to discover matching devices, and on the Peripheral side to start running the services.
 
 On the Central side:
 ```swift
@@ -77,7 +76,7 @@ glucoseMeter
 On the Peripheral side:
 ```swift
 let glucoseMeter = GlucoseMeter()
-if let glucoseService = glucoseMeter.services.first as? GlucoseService {
+if let glucoseService = glucoseMeter.glucoseService {
     // set up characteristic handlers
 }
 glucoseMeter.startPeripheral()
@@ -95,7 +94,7 @@ To that end, I am attempting to add the following publisher extensions to Core B
 * `CBCentralManager.statePublisher` emits events when `CBCentralManager.state` changes.
 * `CBCentralManager.authorizationPublisher` emits events when `CBManager.authorization` changes.
 * `CBCentralManager.discoveryPublisher` emits events when peripherals are discovered.
-* `CBCentralManager.connectionEventPublisher` emits events when peripherals connect, fail to connect, and disconnect.
+* `CBCentralManager.connectionEventPublisher` emits events when _any_ peripherals connect, fail to connect, and disconnect.
 * `CBPeripheral.statePublisher` emits events when any of the following `CBPeripheral` properties change:
     - `state`,
     - `name`, 
@@ -103,6 +102,7 @@ To that end, I am attempting to add the following publisher extensions to Core B
     - `rssi`,
     - `canSendWriteWithoutResponse`.
 * `CBPeripheral.discoveryPublisher` emits events when services, characteristics or descriptors are discovered.
+* `CBPeripheral.connectionEventPublisher` emits events when _that_ peripheral connects, fails to connect, and disconnects.
 * `CBCharacteristic.valuePublisher` emits events when the characteristic value changes.
 * `CBDescriptor.valuePublisher` emits events when the descriptor value changes.
 

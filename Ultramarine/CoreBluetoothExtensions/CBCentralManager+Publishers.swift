@@ -60,8 +60,8 @@ extension CBCentralManager {
         }
     }
     
-    public var statePublisher: StatePublisher {
-        return StatePublisher(central: self)
+    public var statePublisher: AnyPublisher<CBManagerState, Never> {
+        return StatePublisher(central: self).eraseToAnyPublisher()
     }
 }
 
@@ -76,7 +76,7 @@ extension CBCentralManager {
         
         // MARK: Instance variables
         
-        let subject = PassthroughSubject<Output, Failure>()
+        let subject = CurrentValueSubject<Output, Failure>(.notDetermined)
         
         // MARK: Publisher methods
         
@@ -91,22 +91,42 @@ extension CBCentralManager {
         }
     }
     
-    public var authorizationPublisher: AuthorizationPublisher {
-        return AuthorizationPublisher(central: self)
+    public var authorizationPublisher: AnyPublisher<CBManagerAuthorization, Never> {
+        return AuthorizationPublisher(central: self).eraseToAnyPublisher()
     }
 }
 
 // MARK: - DiscoveryPublisher extension
 
+public struct Discovery {
+    let peripheral: CBPeripheral
+    let advertisementData: [String: Any]
+    let rssi: Double
+}
+
 extension CBCentralManager {
     
     public class DiscoveryPublisher: CBCentralManagerPublisher, Publisher {
-        public typealias Output = (peripheral: CBPeripheral, advertisementData: [String: Any], rssi: Double)
+        public typealias Output = Discovery
         public typealias Failure = Error
         
         // MARK: Instance variables
         
         let subject = PassthroughSubject<Output, Failure>()
+        
+        let serviceUUIDs: [CBUUID]?
+        
+        // MARK: Initializer
+        
+        /// Initializer that filters `Discovery` events by the given service UUIDs.
+        /// Only discoveries of peripherals whose services are included in `serviceUUIDs` will be published.
+        ///
+        /// - parameter central: `CBCentralManager` generating discovery events
+        /// - parameter serviceUUIDs: Optional array of `CBUUID` objects used to filter discovery events. Pass `nil` (the default) to discover all peripherals.
+        public init(central: CBCentralManager, serviceUUIDs: [CBUUID]? = nil) {
+            self.serviceUUIDs = serviceUUIDs
+            super.init(central: central)
+        }
         
         // MARK: Publisher methods
         
@@ -117,27 +137,56 @@ extension CBCentralManager {
         // MARK: CBCentralManagerDelegate discovery methods
         
         public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-            self.subject.send((peripheral: peripheral, advertisementData: advertisementData, rssi: RSSI.doubleValue))
+            // If serviceUUIDs is non-nil, only send discoveries that match. Otherwise, send all discoveries.
+            let peripheralServiceUUIDs: [CBUUID] = peripheral.services?.map { $0.uuid } ?? []
+            if serviceUUIDs == nil || serviceUUIDs!.contains(where: peripheralServiceUUIDs.contains) {
+                self.subject.send(Discovery(peripheral: peripheral, advertisementData: advertisementData, rssi: RSSI.doubleValue))
+            }
         }
     }
     
-    public var discoveryPublisher: DiscoveryPublisher {
-        return DiscoveryPublisher(central: self)
+    public var discoveryPublisher: AnyPublisher<Discovery, Error> {
+        return DiscoveryPublisher(central: self).eraseToAnyPublisher()
+    }
+    
+    public func discoverPeripherals(
+        withServices serviceUUIDs: [CBUUID]?,
+        options: [String : Any]? = nil,
+        where predicate: @escaping ((Discovery) -> Bool) = { _ in true }
+    ) -> AnyPublisher<Discovery, Error> {
+        let publisher = DiscoveryPublisher(central: self, serviceUUIDs: serviceUUIDs)
+        self.scanForPeripherals(withServices: serviceUUIDs, options: options)
+        return publisher
+            .filter(predicate)
+            .eraseToAnyPublisher()
+    }
+    
+    public func stopDiscoveringPeripherals() {
+        self.stopScan()
+        self.invokeDelegates { (delegate) in
+            guard let discoveryPublisher = delegate as? CBCentralManager.DiscoveryPublisher else { return }
+            discoveryPublisher.subject.send(completion: .finished)
+        }
     }
 }
 
 // MARK: - ConnectionEventPublisher extension
 
-public enum PublishedConnectionEvent : Int {
+public enum ConnectionEventType : Int {
     case peerDisconnected
     case peerConnected
     case peerFailedToConnect
 }
 
+public struct ConnectionEvent {
+    let peripheral: CBPeripheral
+    let event: ConnectionEventType
+}
+
 extension CBCentralManager {
 
     public class ConnectionEventPublisher: CBCentralManagerPublisher, Publisher {
-        public typealias Output = (peripheral: CBPeripheral, event: PublishedConnectionEvent)
+        public typealias Output = ConnectionEvent
         public typealias Failure = Error
         
         // MARK: Instance variables
@@ -153,30 +202,54 @@ extension CBCentralManager {
         // MARK: CBCentralManagerDelegate connection methods
         
         public func centralManager(_ central: CBCentralManager, connectionEventDidOccur event: CBConnectionEvent, for peripheral: CBPeripheral) {
-            guard let publishedEvent = PublishedConnectionEvent(rawValue: event.rawValue) else { return }
-            self.subject.send((peripheral, publishedEvent))
+            guard let publishedEvent = ConnectionEventType(rawValue: event.rawValue) else { return }
+            self.subject.send(ConnectionEvent(peripheral: peripheral, event: publishedEvent))
         }
         
         public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-            self.subject.send((peripheral: peripheral, event: .peerConnected))
+            self.subject.send(ConnectionEvent(peripheral: peripheral, event: .peerConnected))
         }
         
         public func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-            self.subject.send((peripheral: peripheral, event: .peerFailedToConnect))
+            self.subject.send(ConnectionEvent(peripheral: peripheral, event: .peerFailedToConnect))
             if let error = error {
                 self.subject.send(completion: .failure(error))
             }
         }
         
         public func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-            self.subject.send((peripheral: peripheral, event: .peerDisconnected))
+            self.subject.send(ConnectionEvent(peripheral: peripheral, event: .peerDisconnected))
             if let error = error {
                 self.subject.send(completion: .failure(error))
             }
         }
     }
     
-    public var connectionEventPublisher: ConnectionEventPublisher {
-        return ConnectionEventPublisher(central: self)
+    public var connectionEventPublisher: AnyPublisher<ConnectionEvent, Error> {
+        return ConnectionEventPublisher(central: self).eraseToAnyPublisher()
+    }
+    
+    public func connect(to peripheral: CBPeripheral, options: [String : Any]? = nil) -> AnyPublisher<ConnectionEventType, Error> {
+        let publisher = peripheral.connectionEventPublisher(central: self)
+        self.connect(peripheral, options: options)
+        return publisher
+    }
+    
+    public func connectToFirstDiscovery(
+        withServices serviceUUIDs: [CBUUID]?,
+        scanOptions: [String : Any]? = nil,
+        connectOptions: [String : Any]? = nil,
+        where predicate: @escaping ((Discovery) -> Bool) = { _ in true }
+    ) -> AnyPublisher<ConnectionEventType, Error> {
+        return self
+            .discoverPeripherals(withServices: serviceUUIDs, options: scanOptions, where: predicate)
+            .first()
+            .flatMap { [weak self] (discovery) -> AnyPublisher<ConnectionEventType, Error> in
+                guard let _self = self else {
+                    return Empty().eraseToAnyPublisher()
+                }
+                return _self.connect(to: discovery.peripheral, options: connectOptions)
+            }
+            .eraseToAnyPublisher()
     }
 }

@@ -30,10 +30,10 @@ public class CBPeripheralPublisher : NSObject, CBPeripheralDelegate {
 extension CBPeripheral {
     
     public class ConnectionEventPublisher : CBPeripheralPublisher, Publisher {
-        public typealias Output = PublishedConnectionEvent
+        public typealias Output = ConnectionEventType
         public typealias Failure = Error
         
-        let centralPublisher: CBCentralManager.ConnectionEventPublisher
+        let centralPublisher: AnyPublisher<CBCentralManager.ConnectionEventPublisher.Output, Error>
         let subject = PassthroughSubject<Output, Failure>()
         var subscriptions = Set<AnyCancellable>()
         
@@ -55,20 +55,25 @@ extension CBPeripheral {
         }
     }
     
-    public func connectionEventPublisher(central: CBCentralManager)  -> ConnectionEventPublisher {
-        return ConnectionEventPublisher(peripheral: self, central: central)
+    public func connectionEventPublisher(central: CBCentralManager)  -> AnyPublisher<ConnectionEventType, Error> {
+        return ConnectionEventPublisher(peripheral: self, central: central).eraseToAnyPublisher()
     }
 }
 
 // MARK: - DiscoveryPublisher
 
 enum DiscoveryEventType {
-    case nameUpdated(name: String)
     case services
-    case changedServices
-    case includedServices
-    case characteristics
-    case descriptors
+    case includedServices(service: CBService)
+    case characteristics(service: CBService)
+    case descriptors(descriptors: [CBDescriptor], characteristic: CBCharacteristic)
 }
 
+// MARK: updatePublisher
 
+enum PeripheralChangeType {
+    case name(name: String)
+    case rssi(rssi: Double)
+    case services(services: [CBService])
+    
+}
