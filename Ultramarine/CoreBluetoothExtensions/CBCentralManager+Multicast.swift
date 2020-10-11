@@ -78,12 +78,21 @@ extension CBCentralManager {
     ///
     /// parameter delegate: A `CBCentralManagerDelegate` object that will stop receiving delegate callbacks.
     public func removeDelegate(_ delegate: CBCentralManagerDelegate) {
-        if let delegate = self.delegate as? CBCentralManagerMulticastDelegate {
-            delegate.multicast.removeDelegate(delegate)
-            if delegate.multicast.isEmpty {
-                self.delegate = nil
-            }
+        guard let delegate = self.delegate as? CBCentralManagerMulticastDelegate else { return }
+        delegate.multicast.removeDelegate(delegate)
+        if delegate.multicast.isEmpty {
+            self.delegate = nil
         }
     }
+    
+    /**
+     *  Use this method to invoke a closure on each delegate.
+     *
+     *  - parameter invocation: The closure to be invoked on each delegate.
+     */
+	public func invokeDelegates(_ invocation: (CBCentralManagerDelegate) -> ()) {
+        guard let delegate = self.delegate as? CBCentralManagerMulticastDelegate else { return }
+        delegate.multicast.invokeDelegates(invocation)
+	}
 }
 
